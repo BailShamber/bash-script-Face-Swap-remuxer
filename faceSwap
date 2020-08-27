@@ -4,7 +4,7 @@ original=$(ffprobe -i """$2""" -show_format -v quiet | sed -n 's/duration=//p')
 fps=$(ffprobe -v error -select_streams v -of default=noprint_wrappers=1:nokey=1 -show_entries stream=r_frame_rate """$2""")
 ffmpeg -y -i """$2""" -vn -acodec copy output-audio.aac
 ffmpeg -y -i """$1""" -r $fps -filter:v "setpts=$(awk -v original="$original" -v work="$work" BEGIN'{print original / work; exit}')*PTS" output.mp4
-ffmpeg -y -i output.mp4 -i output-audio.aac -codec copy -shortest final.mp4
+ffmpeg -y -i output.mp4 -i output-audio.aac -codec copy -shortest """$3"""
 
 #echo $1
 #echo $2
